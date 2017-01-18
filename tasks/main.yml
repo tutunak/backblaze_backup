@@ -1,0 +1,11 @@
+- name: import needed variables
+  include_vars: b2_auth.yml
+
+- name: ensure b2 installed
+  pip:
+    name: b2
+    state: latest
+
+- name: auth params for b2
+  command: /usr//bin/b2 "{{ accountId }}" "{{ 001e4f4db65ea68a6119a295b11e950c66a7e7963c }}
+
