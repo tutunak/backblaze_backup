@@ -7,7 +7,7 @@
     state: latest
 
 - name: auth params for b2
-  command: /usr/bin/b2 "{{ accountId }}" "{{ applicationKey }}"
+  command: /usr/bin/b2 authorize-account "{{ accountId }}" "{{ applicationKey }}"
 
 - name: generate file from template
   template:
