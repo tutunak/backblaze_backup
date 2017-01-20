@@ -7,5 +7,21 @@
     state: latest
 
 - name: auth params for b2
-  command: /usr//bin/b2 "{{ accountId }}" "{{ applicationKey }}
+  command: /usr/bin/b2 "{{ accountId }}" "{{ applicationKey }}
 
+- name: generate file from template
+  template:
+    src: backup_script.j2
+    dest: "{{ bp_scripts }}backup_{{ item.value.backup_name }}.bash"
+    owner: backup
+    mode: 0700
+  with_dict: "{{ backups }}"
+
+- name: ensure backup task in cron
+  cron:
+    name: "{{ item.value.backup_name }}"
+    minute: "{{ item.value.minute}}"
+    hour: "{{ item.value.hour }}"
+    user: "{{ user }}"
+    job: "{{ bp_scripts }}backup_{{ item.value.backup_name }}.bash"
+  with_dict: "{{ backups }}"
