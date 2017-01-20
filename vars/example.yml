@@ -1,0 +1,8 @@
+user: backup
+backups:
+  backup_1:
+    source_folder: "/home/user"
+    bucket: "user1"
+    backup_name: "backup_1"
+    minute: "0"
+    hour: "*/6"
