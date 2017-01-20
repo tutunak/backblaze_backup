@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#TODO Edit script for b2
+
+mkdir -p $HOME/backup_logs
+
+time_start=`date +%Y-%m-%d.%H:%M:%S`
+backup_name=backup_{{ item.value.backup_name }}
+backup_file=$HOME/backup_logs/backup_{{ item.value.backup_name }}_$time_start.log
+
+echo "start backup `date +%Y-%m-%d.%H:%M:%S`" >> $backup_file
+
+PID_FILE="/tmp/{{ item.value.backup_name }}.pid"
+if [ -e "${PID_FILE}" ] ; then
+    echo "Backup script already running {{ item.value.backup_name }}" >> $backup_file
+    exit 99;
+fi
+
+echo $! > "${PID_FILE}"
+
+sudo /usr/bin/b2 sync --delete {{ item.value.source_folder }} b2://{{ item.value.bucket }}/ &>> $backup_file
+
+# fields structure
+# script_start_time;result;backup_name;backup_file
+# result:
+# 1 - error
+# 0 - success
+
+if [ $? -eq 1 ]; then
+    echo "$time_start;1;$backup_name;$backup_file" >>/var/log/rf_backup/$backup_name.log
+else
+    echo "$time_start;0;$backup_name;$backup_file" >>/var/log/rf_backup/$backup_name.log
+fi
+
+
+rm -f "${PID_FILE}"
+
+echo "end backup `date +%Y-%m-%d.%H:%M:%S`" >> $backup_file
