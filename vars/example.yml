@@ -6,3 +6,9 @@ backups:
     backup_name: "backup_1"
     minute: "0"
     hour: "*/6"
+  backup_2:
+    source_folder: "/home/user2"
+    bucket: "user2"
+    backup_name: "backup_2"
+    minute: "0"
+    hour: "*/12"
