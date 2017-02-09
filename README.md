@@ -1,4 +1,4 @@
 Backblaze backup
 ================
 
-his is role help automating backup files to backblze using crone and b2 cli.
+This role help automating backup files to backblze using cron and b2 cli.
